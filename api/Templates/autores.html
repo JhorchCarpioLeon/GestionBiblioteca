@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Autores{% endblock %}
+
+{% block content %}
+<h2>Lista de Autores</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Nacionalidad</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for autor in autores %}
+        <tr>
+            <td>{{ autor.nombre }}</td>
+            <td>{{ autor.apellido }}</td>
+            <td>{{ autor.nacionalidad }}</td>
+            <td>{{ autor.fecha_nacimiento }}</td>
+            <td>
+                <a href="?editar={{ autor.id }}">Editar</a> |
+                <a href="?eliminar={{ autor.id }}" onclick="return confirm('¿Estás seguro de eliminar a este autor?')">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>{% if autor %}Editar Autor{% else %}Agregar Autor{% endif %}</h3>
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ autor.id }}">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" value="{{ autor.nombre }}" required><br>
+    
+    <label for="apellido">Apellido:</label>
+    <input type="text" id="apellido" name="apellido" value="{{ autor.apellido }}" required><br>
+
+    <label for="nacionalidad">Nacionalidad:</label>
+    <input type="text" id="nacionalidad" name="nacionalidad" value="{{ autor.nacionalidad }}" required><br>
+
+    <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ autor.fecha_nacimiento }}" required><br>
+
+    <label for="biografia">Biografía:</label>
+    <textarea id="biografia" name="biografia" required>{{ autor.biografia }}</textarea><br>
+
+    <button type="submit">{% if autor %}Actualizar{% else %}Agregar{% endif %}</button>
+</form>
+
+{% endblock %}

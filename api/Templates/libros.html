@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestión de Libros{% endblock %}
+
+{% block content %}
+<h2>Lista de Libros</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Fecha de Publicación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for libro in libros %}
+        <tr>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.fecha_publicacion }}</td>
+            <td>
+                <!-- Enlaces para editar o eliminar un libro -->
+                <a href="?editar={{ libro.id }}">Editar</a> |
+                <a href="?eliminar={{ libro.id }}" onclick="return confirm('¿Estás seguro de eliminar este libro?')">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>{% if libro %}Editar Libro{% else %}Agregar Libro{% endif %}</h3>
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{{ libro.id }}">
+    
+    <label for="titulo">Título:</label>
+    <input type="text" id="titulo" name="titulo" value="{{ libro.titulo }}" required><br>
+    
+    <label for="autor">Autor:</label>
+    <input type="text" id="autor" name="autor" value="{{ libro.autor }}" required><br>
+
+    <label for="fecha_publicacion">Fecha de Publicación:</label>
+    <input type="date" id="fecha_publicacion" name="fecha_publicacion" value="{{ libro.fecha_publicacion }}" required><br>
+
+    <label for="genero">Género:</label>
+    <input type="text" id="genero" name="genero" value="{{ libro.genero }}" required><br>
+
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" required>{{ libro.descripcion }}</textarea><br>
+
+    <button type="submit">{% if libro %}Actualizar{% else %}Agregar{% endif %}</button>
+</form>
+
+{% endblock %}
